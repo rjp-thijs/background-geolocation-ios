@@ -98,7 +98,8 @@ static MAURLocationTransform s_locationTransform = nil;
         if (hasConnectivity && [self.config hasValidUrl]) {
           NSTimeInterval timeInSeconds = [[NSDate date] timeIntervalSince1970];
           NSInteger currentTime = round(timeInSeconds) * 1000;
-          NSInteger diff = currentTime - [_config fastestInterval];
+          NSInteger configFastestInterval = [self.config fastestInterval];
+          NSInteger diff = currentTime - configFastestInterval;
 
           if([lastUpdateAt intValue] < diff) {
             NSError *error = nil;
