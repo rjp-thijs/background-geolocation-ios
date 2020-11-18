@@ -12,7 +12,7 @@
 
 @implementation MAURConfig 
 
-@synthesize stationaryRadius, distanceFilter, desiredAccuracy, _debug, activityType, activitiesInterval, _stopOnTerminate, url, syncUrl, syncThreshold, httpHeaders, _saveBatteryOnBackground, maxLocations, _pauseLocationUpdates, locationProvider, _template;
+@synthesize stationaryRadius, distanceFilter, desiredAccuracy, _debug, activityType, activitiesInterval, _stopOnTerminate, url, syncUrl, enableSync, syncThreshold, httpHeaders, _saveBatteryOnBackground, maxLocations, _pauseLocationUpdates, locationProvider, _template, fastestInterval;
 
 -(instancetype) initWithDefaults {
     self = [super init];
@@ -31,7 +31,9 @@
     _saveBatteryOnBackground = [NSNumber numberWithBool:NO];
     maxLocations = [NSNumber numberWithInt:10000];
     syncThreshold = [NSNumber numberWithInt:100];
+    enableSync = [NSNumber numberWithBool:YES];
     _pauseLocationUpdates = [NSNumber numberWithBool:NO];
+    fastestInterval = [NSNumber numberWithInt:5000];
     locationProvider = [NSNumber numberWithInt:DISTANCE_FILTER_PROVIDER];
 //    template =
     
@@ -65,6 +67,12 @@
     }
     if (config[@"url"] != nil) {
         instance.url = config[@"url"];
+    }
+    if (config[@"enableSync"] != nil) {
+        instance.enableSync = config[@"enableSync"];
+    }
+    if (config[@"fastestInterval"] != nil) {
+        instance.fastestInterval = config[@"fastestInterval"];
     }
     if (config[@"syncUrl"] != nil) {
         instance.syncUrl = config[@"syncUrl"];
@@ -358,6 +366,11 @@
 - (BOOL) pauseLocationUpdates
 {
     return _pauseLocationUpdates.boolValue;
+}
+
+- (BOOL) isSyncEnabled
+{
+    return enableSync.boolValue;
 }
 
 - (CLActivityType) decodeActivityType

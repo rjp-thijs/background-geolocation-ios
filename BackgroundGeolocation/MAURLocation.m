@@ -95,18 +95,17 @@ MAURLocation* _location;
 
 + (NSDictionary*) toDictionary:(CLLocation*)location;
 {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:10];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:7];
+    NSString *ver = [[UIDevice currentDevice] systemVersion];
+    int ver_int = [ver intValue];
 
+    [dict setObject:[NSString stringWithFormat:@"IOS %d", ver_int] forKey:@"OS"];
     NSNumber* timestamp = [NSNumber numberWithDouble:([location.timestamp timeIntervalSince1970] * 1000)];
-    [dict setObject:timestamp forKey:@"time"];
-    [dict setObject:[NSNumber numberWithDouble:location.horizontalAccuracy] forKey:@"accuracy"];
-    [dict setObject:[NSNumber numberWithDouble:location.verticalAccuracy] forKey:@"altitudeAccuracy"];
-    [dict setObject:[NSNumber numberWithDouble:location.speed] forKey:@"speed"];
-    [dict setObject:[NSNumber numberWithDouble:location.course] forKey:@"heading"];
-    [dict setObject:[NSNumber numberWithDouble:location.course] forKey:@"bearing"];
-    [dict setObject:[NSNumber numberWithDouble:location.altitude] forKey:@"altitude"];
-    [dict setObject:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"latitude"];
-    [dict setObject:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"longitude"];
+    [dict setObject:timestamp forKey:@"t"];
+    [dict setObject:[NSNumber numberWithDouble:location.speed] forKey:@"v"];
+    [dict setObject:[NSNumber numberWithDouble:location.course] forKey:@"h"];
+    [dict setObject:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"lat"];
+    [dict setObject:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"lng"];
 
     return dict;
 }

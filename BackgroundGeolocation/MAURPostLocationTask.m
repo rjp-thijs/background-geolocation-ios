@@ -28,6 +28,8 @@ static NSString * const TAG = @"MAURPostLocationTask";
     Reachability *reach;
     MAURBackgroundSync *uploader;
     BOOL hasConnectivity;
+    
+    NSNumber *lastUpdateAt;
 }
 
 static MAURLocationTransform s_locationTransform = nil;
@@ -41,6 +43,7 @@ static MAURLocationTransform s_locationTransform = nil;
     }
 
     hasConnectivity = YES;
+    lastUpdateAt = 0;
 
     uploader = [[MAURBackgroundSync alloc] init];
     uploader.delegate = self;
@@ -93,20 +96,29 @@ static MAURLocationTransform s_locationTransform = nil;
         NSNumber *locationId = [locationDAO persistLocation:location limitRows:_config.maxLocations.integerValue];
         
         if (hasConnectivity && [self.config hasValidUrl]) {
+          NSTimeInterval timeInSeconds = [[NSDate date] timeIntervalSince1970];
+          NSInteger currentTime = round(timeInSeconds) * 1000;
+          NSInteger diff = currentTime - [_config fastestInterval];
+
+          if([lastUpdateAt intValue] < diff) {
             NSError *error = nil;
+            lastUpdateAt = [NSNumber numberWithInteger:currentTime];
             if ([self post:location toUrl:self.config.url withTemplate:self.config._template withHttpHeaders:self.config.httpHeaders error:&error]) {
                 if (locationId != nil) {
                     [locationDAO deleteLocation:locationId error:nil];
                 }
             }
+          }
         }
-
-        if ([self.config hasValidSyncUrl]) {
-            NSNumber *locationsCount = [locationDAO getLocationsForSyncCount];
-            if (locationsCount && [locationsCount integerValue] >= self.config.syncThreshold.integerValue) {
-                DDLogDebug(@"%@ Attempt to sync locations: %@ threshold: %@", TAG, locationsCount, self.config.syncThreshold);
-                [self sync];
-            }
+        
+        if([self.config isSyncEnabled]){
+          if ([self.config hasValidSyncUrl]) {
+              NSNumber *locationsCount = [locationDAO getLocationsForSyncCount];
+              if (locationsCount && [locationsCount integerValue] >= self.config.syncThreshold.integerValue) {
+                  DDLogDebug(@"%@ Attempt to sync locations: %@ threshold: %@", TAG, locationsCount, self.config.syncThreshold);
+                  [self sync];
+              }
+          }
         }
     });
 }

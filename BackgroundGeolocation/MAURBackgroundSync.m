@@ -87,6 +87,7 @@
             [request addValue:value forHTTPHeaderField:key];
         }
     }
+    
     NSURLSessionTask *task = [urlSession uploadTaskWithRequest:request fromFile:jsonUrl];
     task.taskDescription = fileName;
     [tasks addObject:task];
