@@ -34,7 +34,7 @@
     enableSync = [NSNumber numberWithBool:YES];
     _pauseLocationUpdates = [NSNumber numberWithBool:NO];
     fastestInterval = [NSNumber numberWithInt:5000];
-    locationProvider = [NSNumber numberWithInt:DISTANCE_FILTER_PROVIDER];
+    locationProvider = [NSNumber numberWithInt:DISTANCE_TIMED_FILTER_PROVIDER];
 //    template =
     
     return self;
