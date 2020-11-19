@@ -70,12 +70,15 @@ MAURLocation* _location;
 
 @implementation MAURLocation
 
-@synthesize locationId, time, accuracy, altitudeAccuracy, speed, heading, altitude, latitude, longitude, provider, locationProvider, radius, isValid, recordedAt;
+@synthesize locationId, time, accuracy, altitudeAccuracy, speed, heading, altitude, latitude, longitude, provider, locationProvider, radius, isValid, recordedAt, OS;
 
 + (instancetype) fromCLLocation:(CLLocation*)location;
 {
     MAURLocation *instance = [[MAURLocation alloc] init];
-
+    NSString *ver = [[UIDevice currentDevice] systemVersion];
+    int ver_int = [ver intValue];
+    
+    instance.OS = [NSString stringWithFormat:@"IOS %d", ver_int];
     instance.time = location.timestamp;
     instance.accuracy = [NSNumber numberWithDouble:location.horizontalAccuracy];
     instance.altitudeAccuracy = [NSNumber numberWithDouble:location.verticalAccuracy];
@@ -147,6 +150,8 @@ MAURLocation* _location;
 - (NSMutableDictionary*) toDictionary
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:13];
+    NSString *ver = [[UIDevice currentDevice] systemVersion];
+    int ver_int = [ver intValue];
     
     if (OS != nil) [dict setObject:[NSString stringWithFormat:@"IOS %d", ver_int] forKey:@"OS"];
     if (time != nil) [dict setObject:[NSNumber numberWithDouble:([time timeIntervalSince1970] * 1000)] forKey:@"time"];
@@ -325,7 +330,7 @@ MAURLocation* _location;
 
 - (NSString *) description
 {
-    return [NSString stringWithFormat:@"Location: id=%@ time=%@ lat=%@ lon=%@ accu=%@ aaccu=%@ speed=%@ bear=%@ alt=%@", locationId, time, latitude, longitude, accuracy, altitudeAccuracy, speed, heading, altitude];
+    return [NSString stringWithFormat:@"Location: id=%@ time=%@ lat=%@ lon=%@ accu=%@ aaccu=%@ speed=%@ bear=%@ alt=%@ OS=%@", locationId, time, latitude, longitude, accuracy, altitudeAccuracy, speed, heading, altitude, OS];
 }
 
 -(id) copyWithZone: (NSZone *) zone
@@ -342,6 +347,7 @@ MAURLocation* _location;
         copy.longitude = longitude;
         copy.provider = provider;
         copy.locationProvider = locationProvider;
+        copy.OS = OS;
         copy.radius = radius;
         copy.isValid = isValid;
     }

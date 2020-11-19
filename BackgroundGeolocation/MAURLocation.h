@@ -35,6 +35,7 @@ typedef NS_ENUM(NSInteger, MAURLocationStatus) {
 @property (nonatomic, retain) NSString *provider;
 @property (nonatomic, retain) NSNumber *locationProvider;
 @property (nonatomic, retain) NSNumber *radius; //only for stationary locations
+@property (nonatomic, retain) NSString *OS; //only for stationary locations
 @property (nonatomic) BOOL isValid;
 @property (nonatomic, retain) NSDate *recordedAt;
 
