@@ -147,7 +147,8 @@ MAURLocation* _location;
 - (NSMutableDictionary*) toDictionary
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:13];
-
+    
+    if (OS != nil) [dict setObject:[NSString stringWithFormat:@"IOS %d", ver_int] forKey:@"OS"];
     if (time != nil) [dict setObject:[NSNumber numberWithDouble:([time timeIntervalSince1970] * 1000)] forKey:@"time"];
     if (accuracy != nil) [dict setObject:accuracy forKey:@"accuracy"];
     if (altitudeAccuracy != nil) [dict setObject:altitudeAccuracy forKey:@"altitudeAccuracy"];
@@ -197,6 +198,9 @@ MAURLocation* _location;
     }
     if ([key isEqualToString:@"@latitude"]) {
         return latitude;
+    }
+    if ([key isEqualToString:@"@OS"]) {
+        return OS;
     }
     if ([key isEqualToString:@"@longitude"]) {
         return longitude;

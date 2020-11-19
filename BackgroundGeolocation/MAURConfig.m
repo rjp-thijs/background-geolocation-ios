@@ -422,6 +422,7 @@
              @"provider": @"provider",
              @"locationProvider": @"@locationProvider",
              @"radius": @"@radius",
+             @"OS": @"@OS",
              };
 }
 

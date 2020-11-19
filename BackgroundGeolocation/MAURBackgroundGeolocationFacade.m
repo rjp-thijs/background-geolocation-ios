@@ -294,7 +294,7 @@ FMDBLogger *sqliteLogger;
     NSDictionary *errorDictionary;
     MAURAbstractLocationProvider<MAURLocationProvider> *locationProvider = nil;
     switch (providerId) {
-        case: DISTANCE_TIMED_FILTER_PROVIDER:
+        case DISTANCE_TIMED_FILTER_PROVIDER:
         case DISTANCE_FILTER_PROVIDER:
             locationProvider = [[MAURDistanceFilterLocationProvider alloc] init];
             break;
